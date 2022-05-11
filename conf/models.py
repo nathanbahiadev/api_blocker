@@ -23,3 +23,13 @@ class BlockedIp(ModelBase):
     ip: str = Column(String, nullable=False)
     date: datetime = Column(DATETIME, default=datetime.now)
     system: str = Column(String, nullable=False)
+
+
+class WatchListIp(ModelBase):
+    __tablename__ = 'watch_list_ips'
+    __table_args__ = {'extend_existing': True}
+
+    id: int = Column(Integer, primary_key=True, autoincrement=True)
+    ip: str = Column(String, nullable=False)
+    date: datetime = Column(DATETIME, default=datetime.now)
+    system: str = Column(String, nullable=False)

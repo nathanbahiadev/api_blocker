@@ -10,24 +10,29 @@ app = FastAPI(docs_url="/api/v1/documentation")
 
 @app.post("/api/v1/ip/verify/", status_code=status.HTTP_200_OK, tags=["IP"])
 async def verify_access(request: Request):
+    """Main function - Receives the parameters and check is the request is valid"""
     response: dict = Blocker(**request.dict()).verify()
     return {"response": response}
 
 
 @app.get("/api/v1/ip/blocked/", status_code=status.HTTP_200_OK, tags=["IP"])
 async def blocked_ips(system_name: str = None):
+    """Lists all blocked ips. Receives an optional query param 'system_name' to filter
+    results by a specific system"""
     response: list = Blocker.list_blocked_ips(search_for_system_name=system_name)
     return {"response": response}
 
 
 @app.post("/api/v1/ip/remove/", status_code=status.HTTP_204_NO_CONTENT, tags=["IP"])
 async def remove_blocked_ip(ip: Ip):
-    ipaddress: str = ip.ipaddress
-    Blocker.remove_blocked_ip(ipaddress)
-    return {}
+    """Removes a blocked ip from the blocked and watch list by system"""
+    Blocker(**ip.dict()).remove_blocked_ip()
+    return
 
 
 def custom_openapi():
+    """Documentation settings"""
+
     if app.openapi_schema:
         return app.openapi_schema
 
