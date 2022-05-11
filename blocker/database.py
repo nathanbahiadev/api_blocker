@@ -6,7 +6,7 @@ from conf.models import RequestIp, BlockedIp
 
 
 class DataBaseBlockerInterface(ABC):
-    def __init__(self, database_model: Union[RequestIp, BlockedIp]):
+    def __init__(self, database_model):
         self.database_model = database_model
 
     def fetch_requests(self, ipaddress: str) -> List[Union[RequestIp, BlockedIp]]:
@@ -54,4 +54,3 @@ class DataBaseBlockedIp(DataBaseBlockerInterface):
             for result in results:
                 session.delete(result)
             session.commit()
-

@@ -4,10 +4,10 @@ from pydantic import BaseModel
 class Request(BaseModel):
     ipaddress: str
     system: str
-    limit_requests: int = 10
+    to_limit: bool
+    to_block: bool
     limit_seconds: int = 60
-    to_limit: bool = False
-    to_block: bool = False
+    limit_requests: int = 10
     to_limit_response: dict = {}
     to_block_response: dict = {}
     show_time_left: bool = False

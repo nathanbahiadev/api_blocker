@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import Optional
+from typing import Optional, List
 
 from blocker.database import DataBaseRequestIp, DataBaseBlockedIp
 
@@ -66,6 +66,7 @@ class Blocker:
 
     def __handle_to_limit(self) -> Optional[dict]:
         valid_access: bool = self.__to_limit_validate_access()
+
         if not valid_access:
             response: dict = self.to_limit_response
 
@@ -79,6 +80,7 @@ class Blocker:
             return self.to_block_response
 
         valid_access: bool = self.__to_block_validate_access()
+
         if not valid_access:
             return self.to_block_response
 
@@ -92,3 +94,9 @@ class Blocker:
             return self.__handle_to_limit() or default
 
         return default
+
+    def list_blocked_ips(self, search_for_system_name: str) -> List[dict]:
+        return self.to_block_database.list_blocked_ips(search_for_system_name)
+
+    def remove_blocked_ip(self, ipaddress: str) -> None:
+        return self.to_block_database.remove_blocked_ip(ipaddress)
