@@ -69,7 +69,7 @@ class Blocker:
         # Calcula the time passed from the first access to now and check if the
         # request is valid
         id_first_access: int = latest_accesses[0].id
-        date_first_access: datetime = latest_accesses[0].date
+        date_first_access: datetime = datetime.fromisoformat(latest_accesses[0].date)
         self.time_left: int = self.__countdown(date_first_access)
 
         if self.time_left <= 0:

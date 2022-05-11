@@ -1,8 +1,12 @@
 from datetime import datetime
 
-from sqlalchemy import Column, Integer, String, DATETIME, Boolean
+from sqlalchemy import Column, Integer, String
 
 from conf.model_base import ModelBase
+
+
+def datetime_to_iso() -> str:
+    return datetime.now().isoformat()
 
 
 class RequestIp(ModelBase):
@@ -11,7 +15,7 @@ class RequestIp(ModelBase):
 
     id: int = Column(Integer, primary_key=True, autoincrement=True)
     ip: str = Column(String, nullable=False)
-    date: datetime = Column(DATETIME, default=datetime.now)
+    date: str = Column(String, default=datetime_to_iso)
     system: str = Column(String, nullable=False)
 
 
@@ -21,7 +25,7 @@ class BlockedIp(ModelBase):
 
     id: int = Column(Integer, primary_key=True, autoincrement=True)
     ip: str = Column(String, nullable=False)
-    date: datetime = Column(DATETIME, default=datetime.now)
+    date: str = Column(String, default=datetime_to_iso)
     system: str = Column(String, nullable=False)
 
 
@@ -31,5 +35,5 @@ class WatchListIp(ModelBase):
 
     id: int = Column(Integer, primary_key=True, autoincrement=True)
     ip: str = Column(String, nullable=False)
-    date: datetime = Column(DATETIME, default=datetime.now)
+    date: str = Column(String, default=datetime_to_iso)
     system: str = Column(String, nullable=False)
