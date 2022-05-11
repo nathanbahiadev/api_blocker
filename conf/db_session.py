@@ -33,6 +33,8 @@ def create_session() -> Session:
 
 
 def create_tables() -> None:
+    print("Iniciando criação do banco de dados...")
+
     global __engine
 
     if not __engine:
@@ -41,3 +43,5 @@ def create_tables() -> None:
     from conf import all_models
     ModelBase.metadata.drop_all(__engine)
     ModelBase.metadata.create_all(__engine)
+
+    print("Banco de dados criado com sucesso!")
