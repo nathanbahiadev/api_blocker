@@ -1,3 +1,4 @@
+from datetime import datetime
 from typing import List
 
 from blocker.database.interface import DataBaseBlockerInterface
@@ -27,7 +28,11 @@ class DBBlockedIp(DataBaseBlockerInterface):
         with create_session() as session:
             results = session.query(BlockedIp).filter(BlockedIp.system == system).all() \
                 if system else session.query(BlockedIp).all()
-            return [{'ip': result.ip, 'system': result.system, 'date': result.date} for result in results]
+            return [{
+                'ip': result.ip,
+                'system': result.system,
+                'date': datetime.fromisoformat(result.date)
+            } for result in results]
 
     @staticmethod
     def remove_blocked_ip(ipaddress: str, system: str) -> None:

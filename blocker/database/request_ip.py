@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from blocker.database.interface import DataBaseBlockerInterface
 from conf.db_session import create_session
 from conf.models import RequestIp
@@ -19,3 +21,16 @@ class DBRequestIp(DataBaseBlockerInterface):
             for result in results:
                 session.delete(result)
             session.commit()
+
+    @staticmethod
+    def list_request_ips(system):
+        """This method list all ips for a system"""
+
+        with create_session() as session:
+            results = session.query(RequestIp).filter(RequestIp.system == system).all() \
+                if system else session.query(RequestIp).all()
+            return [{
+                'ip': result.ip,
+                'system': result.system,
+                'date': datetime.fromisoformat(result.date)
+            } for result in results]

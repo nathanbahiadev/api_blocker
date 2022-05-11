@@ -163,3 +163,8 @@ class Blocker:
         self.to_block_database.remove_blocked_ip(self.ipaddress, self.system)
         self.to_limit_database.remove_logs_ip(self.ipaddress, self.system)
         self.watch_database.remove_observed_ip(self.ipaddress, self.system)
+
+    @classmethod
+    def list_request_ips(cls, search_for_system_name: str) -> List[dict]:
+        """This method does what it's name describes, duhh"""
+        return cls.to_limit_database.list_request_ips(search_for_system_name)

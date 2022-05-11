@@ -1,15 +1,33 @@
-from fastapi import FastAPI, status
+from fastapi import FastAPI, Request, status
 from fastapi.openapi.utils import get_openapi
+from fastapi.responses import HTMLResponse
+from fastapi.templating import Jinja2Templates
 
-from blocker.post_data import Request, Ip
+from blocker.post_data import Request as BlockerRequest, Ip
 from blocker.blocker import Blocker
-
+from conf.db_session import create_session
 
 app = FastAPI(docs_url="/api/v1/documentation")
 
+templates = Jinja2Templates(directory="templates")
+
+
+@app.get("/{pk}", response_class=HTMLResponse)
+async def dashboard(request: Request, system_name: str = None):
+    with create_session() as session:
+        blocked: list = Blocker.list_blocked_ips(search_for_system_name=system_name)
+        last_results: list = Blocker.list_request_ips(search_for_system_name=system_name)
+
+    context = {
+        'request': request,
+        'blocked': blocked,
+        'last_results': last_results
+    }
+    return templates.TemplateResponse("dashboard.html", context)
+
 
 @app.post("/api/v1/ip/verify/", status_code=status.HTTP_200_OK, tags=["IP"])
-async def verify_access(request: Request):
+async def verify_access(request: BlockerRequest):
     """Main function - Receives the parameters and check is the request is valid"""
     response: dict = Blocker(**request.dict()).verify()
     return {"response": response}
